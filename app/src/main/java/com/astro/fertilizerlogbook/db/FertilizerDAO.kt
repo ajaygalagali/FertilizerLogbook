@@ -3,6 +3,7 @@ package com.astro.fertilizerlogbook.db
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.astro.fertilizerlogbook.models.FertilizerModel
+import com.astro.fertilizerlogbook.models.HistoryModel
 
 @Dao
 interface FertilizerDAO {
@@ -15,5 +16,18 @@ interface FertilizerDAO {
 
     @Query("SELECT * FROM tbl_fertilizers")
     fun getAllFertilizers() : LiveData<List<FertilizerModel>>
+
+
+
+    // History operations
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun upsertHistory(item : HistoryModel)
+
+    @Delete
+    suspend fun deleteHistory(item : HistoryModel)
+
+    @Query("SELECT * FROm tbl_history")
+    fun getAllHistoryItems()  :LiveData<List<HistoryModel>>
+
 
 }

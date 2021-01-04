@@ -13,7 +13,7 @@
         app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
 
         <fragment
             android:id="@+id/navHostFragment"
@@ -35,12 +35,14 @@
         app:menu="@menu/bottom_nav_menu" />
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbarMain"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/toolbarMain"
             app:menu="@menu/main_menu"
             app:title="@string/app_name"
             app:titleTextColor="@color/colorWhite"

@@ -3,14 +3,14 @@ package com.astro.fertilizerlogbook.ui
 import android.app.Dialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.astro.fertilizerlogbook.R
 import com.astro.fertilizerlogbook.db.FertilizerDatabase
-import com.astro.fertilizerlogbook.db.repository.FertilizerRepository
+import com.astro.fertilizerlogbook.repository.FertilizerRepository
 import com.astro.fertilizerlogbook.models.FertilizerModel
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.popup_add_new_item.*
 
@@ -43,6 +43,7 @@ class MainActivity : AppCompatActivity() {
                         btnAdd.setOnClickListener {
                             if (etNamePopup.text.toString().isNotEmpty()) {
                                 viewModel.upsertCatalog(FertilizerModel(name = etNamePopup.text.toString()))
+                                Toast.makeText(applicationContext,"Added to db",Toast.LENGTH_SHORT).show()
                                 dismiss()
                             } else {
 

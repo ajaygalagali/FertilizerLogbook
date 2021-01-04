@@ -40,7 +40,17 @@ class SelectionAdapter : RecyclerView.Adapter<SelectionAdapter.SelectionViewHold
         holder.itemView.apply {
 
             cbMainRow.text = curitem.name
-            cbMainRow.isChecked = curitem.isChecked
+
+            cbMainRow.setOnCheckedChangeListener { buttonView, isChecked ->
+                if(isChecked){
+                    onItemClickListener?.let { it(curitem) }
+                }else{
+                    onItemClickListener?.let {
+                            it(curitem)
+                    }
+                }
+            }
+
 
         }
 
@@ -49,4 +59,14 @@ class SelectionAdapter : RecyclerView.Adapter<SelectionAdapter.SelectionViewHold
     override fun getItemCount(): Int {
         return differ.currentList.size
     }
+
+    private var onItemClickListener : ((FertilizerModel)->Unit)? = null
+
+    fun setCbClickListener(listener : ((FertilizerModel)->Unit)){
+        onItemClickListener = listener
+
+
+    }
+
+
 }

@@ -9,5 +9,5 @@ data class FertilizerModel(
     @PrimaryKey(autoGenerate = true)
     val id: Int? = null,
     val name : String?,
-    val isChecked : Boolean = false
+//    var isChecked : Boolean = false
 )
