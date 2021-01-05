@@ -6,13 +6,27 @@
     app:startDestination="@id/selectionFragment">
 
     <fragment
-        android:id="@+id/historyFragment"
-        android:name="com.astro.fertilizerlogbook.ui.fragments.HistoryFragment"
-        android:label="fragment_history"
-        tools:layout="@layout/fragment_history" />
-    <fragment
         android:id="@+id/selectionFragment"
         android:name="com.astro.fertilizerlogbook.ui.fragments.SelectionFragment"
         android:label="fragment_selection"
         tools:layout="@layout/fragment_selection" />
+    <fragment
+        android:id="@+id/cropListFragment"
+        android:name="com.astro.fertilizerlogbook.ui.fragments.CropListFragment"
+        android:label="fragment_crop_list"
+        tools:layout="@layout/fragment_crop_list" >
+        <action
+            android:id="@+id/action_cropListFragment_to_historyFragment"
+            app:destination="@id/historyFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/historyFragment"
+        android:name="com.astro.fertilizerlogbook.ui.fragments.HistoryFragment"
+        android:label="fragment_history"
+        tools:layout="@layout/fragment_history" >
+        <argument
+            android:name="cropNameArgs"
+            app:argType="string"
+            android:defaultValue="noName" />
+    </fragment>
 </navigation>

@@ -29,36 +29,6 @@ class MainActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(this,viewModelFactory).get(FertilizerViewModel::class.java)
 
-        val dialog = Dialog(this)
-        dialog.setContentView(R.layout.popup_add_new_item)
-
-        // Adding New Item to catalog
-        toolbarMain.setOnMenuItemClickListener {
-
-            when(it.title){
-                "Add new item" -> {
-
-                    dialog.show()
-                    dialog.apply {
-                        btnAdd.setOnClickListener {
-                            if (etNamePopup.text.toString().isNotEmpty()) {
-                                viewModel.upsertCatalog(FertilizerModel(name = etNamePopup.text.toString()))
-                                Toast.makeText(applicationContext,"Added to db",Toast.LENGTH_SHORT).show()
-                                dismiss()
-                            } else {
-
-                            }
-
-                        }
-                    }
-
-                    return@setOnMenuItemClickListener true
-                }
-
-                else -> return@setOnMenuItemClickListener false
-            }
-
-        }
 
 
 

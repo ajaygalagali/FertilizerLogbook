@@ -2,6 +2,7 @@ package com.astro.fertilizerlogbook.db
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import com.astro.fertilizerlogbook.models.CropModel
 import com.astro.fertilizerlogbook.models.FertilizerModel
 import com.astro.fertilizerlogbook.models.HistoryModel
 
@@ -26,8 +27,19 @@ interface FertilizerDAO {
     @Delete
     suspend fun deleteHistory(item : HistoryModel)
 
-    @Query("SELECT * FROm tbl_history")
-    fun getAllHistoryItems()  :LiveData<List<HistoryModel>>
+    @Query("SELECT * FROm tbl_history where crop = :cropName")
+    fun getAllHistoryItems(cropName : String)  :LiveData<List<HistoryModel>>
+
+
+    // CropsList
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun upsertCrop(item : CropModel)
+
+    @Delete
+    suspend fun deleteCrop(item : CropModel)
+
+    @Query("select * from tbl_crop")
+    fun getCropItems() : LiveData<List<CropModel>>
 
 
 }

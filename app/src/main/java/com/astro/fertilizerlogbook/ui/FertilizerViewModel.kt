@@ -2,6 +2,7 @@ package com.astro.fertilizerlogbook.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.astro.fertilizerlogbook.models.CropModel
 import com.astro.fertilizerlogbook.repository.FertilizerRepository
 import com.astro.fertilizerlogbook.models.FertilizerModel
 import com.astro.fertilizerlogbook.models.HistoryModel
@@ -34,7 +35,19 @@ class FertilizerViewModel(
         repository.deleteHistory(item)
     }
 
-    fun getAllHistoryItems() = repository.getAllHistoryItems()
+    fun getAllHistoryItems(cropName : String) = repository.getAllHistoryItems(cropName)
+
+
+    // Crop ops
+    fun upsertCrop(item : CropModel) = viewModelScope.launch {
+        repository.upsertCrop(item)
+    }
+
+    fun deleteCrop(item : CropModel) = viewModelScope.launch {
+        repository.deleteCrop(item)
+    }
+
+    fun getAllCropItems() = repository.getAllCropItems()
 
 
 }

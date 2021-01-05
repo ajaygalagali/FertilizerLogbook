@@ -1,6 +1,7 @@
 package com.astro.fertilizerlogbook.repository
 
 import com.astro.fertilizerlogbook.db.FertilizerDatabase
+import com.astro.fertilizerlogbook.models.CropModel
 import com.astro.fertilizerlogbook.models.FertilizerModel
 import com.astro.fertilizerlogbook.models.HistoryModel
 
@@ -15,6 +16,11 @@ class FertilizerRepository(
     // History Operations
     suspend fun upsertHistory(item : HistoryModel) = db.getFertilizerDao().upsertHistory(item)
     suspend fun deleteHistory(item : HistoryModel) = db.getFertilizerDao().deleteHistory(item)
-    fun getAllHistoryItems() = db.getFertilizerDao().getAllHistoryItems()
+    fun getAllHistoryItems(cropName : String) = db.getFertilizerDao().getAllHistoryItems(cropName)
+
+    // Crop Ops
+    suspend fun upsertCrop(item : CropModel) = db.getFertilizerDao().upsertCrop(item)
+    suspend fun deleteCrop(item : CropModel) = db.getFertilizerDao().deleteCrop(item)
+    fun getAllCropItems() = db.getFertilizerDao().getCropItems()
 
 }
