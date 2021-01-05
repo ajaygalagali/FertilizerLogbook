@@ -42,13 +42,9 @@ class SelectionAdapter : RecyclerView.Adapter<SelectionAdapter.SelectionViewHold
             cbMainRow.text = curitem.name
 
             cbMainRow.setOnCheckedChangeListener { buttonView, isChecked ->
-                if(isChecked){
-                    onItemClickListener?.let { it(curitem) }
-                }else{
-                    onItemClickListener?.let {
-                            it(curitem)
-                    }
-                }
+
+                onItemClickListener?.let { it(curitem) }
+
             }
 
 

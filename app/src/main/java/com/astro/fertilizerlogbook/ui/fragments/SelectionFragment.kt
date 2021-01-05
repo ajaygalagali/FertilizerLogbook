@@ -30,6 +30,7 @@ class SelectionFragment : Fragment(R.layout.fragment_selection) {
     lateinit var sAdapter: SelectionAdapter
     lateinit var selectedList: MutableList<String>
     lateinit var cropList : MutableList<String>
+    lateinit var currentFertilizerList : MutableList<FertilizerModel>
     var selectedCrop = ""
     private val TAG = "SelectionFragment"
 
@@ -41,6 +42,7 @@ class SelectionFragment : Fragment(R.layout.fragment_selection) {
         selectedList = mutableListOf()
 
         cropList = mutableListOf()
+        currentFertilizerList = mutableListOf()
 
 
 
@@ -76,8 +78,10 @@ class SelectionFragment : Fragment(R.layout.fragment_selection) {
 
         }
 
+        // Getting All Fertilizer list
         viewModel.getAllFertilizers().observe(viewLifecycleOwner,Observer{
             sAdapter.differ.submitList(it)
+            currentFertilizerList = it as MutableList<FertilizerModel>
         })
 
         sAdapter.setCbClickListener {
@@ -91,7 +95,7 @@ class SelectionFragment : Fragment(R.layout.fragment_selection) {
             }
         }
 
-        // FAB click handling
+        // Saving to history
         fab_select.setOnClickListener {
             val localeDateTime = LocalDateTime.now()
             val dateFormatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)
@@ -100,31 +104,54 @@ class SelectionFragment : Fragment(R.layout.fragment_selection) {
             val clonelist = mutableListOf<String>()
             clonelist.addAll(selectedList)
 
-            viewModel.upsertHistory(HistoryModel(items = clonelist,timeStamp = timeStamp,crop = selectedCrop))
-            selectedList.clear()
+            Log.d(TAG, "onViewCreated: FAB Slected crop -> $selectedCrop")
+            if (selectedCrop.isEmpty()){
+                Snackbar.make(requireView(),"Select a crop",Snackbar.LENGTH_SHORT).show()
+            }else if (clonelist.isEmpty()){
+                Snackbar.make(requireView(),"Select fertilizers",Snackbar.LENGTH_SHORT).show()
+            }else{
+                viewModel.upsertHistory(HistoryModel(items = clonelist,timeStamp = timeStamp,crop = selectedCrop))
+                selectedList.clear()
+                Snackbar.make(requireActivity().findViewById(R.id.frameLayoutMain),"Added Successfully",Snackbar.LENGTH_SHORT).apply {
+                    setAction("Dismiss"){
+                        this.dismiss()
+                    }
+                }.show()
+            }
 
 
-            Snackbar.make(requireActivity().findViewById(R.id.frameLayoutMain),"Added Successfully",Snackbar.LENGTH_SHORT).apply {
-                setAction("Dismiss"){
-                    this.dismiss()
-                }
-            }.show()
         }
 
         val dialog = Dialog(requireContext())
         dialog.setContentView(R.layout.popup_add_new_item)
 
-        // Adding New Item to catalog
+        // Adding New Fertilizer to catalog
         toolbarHome.setOnMenuItemClickListener {
 
             if (it.itemId == R.id.addNewItemMenu){
                 dialog.show()
                 dialog.apply {
                     btnAdd.setOnClickListener {
-                        if (etNamePopup.text.toString().isNotEmpty()) {
-                            viewModel.upsertCatalog(FertilizerModel(name = etNamePopup.text.toString().trim()))
-                            Toast.makeText(requireContext(),"Saved",Toast.LENGTH_SHORT).show()
-                            dismiss()
+                        val fertilizerName = etNamePopup.text.toString().trim()
+                        var isDuplicate = false
+                        if (fertilizerName.isNotEmpty()) {
+
+                            // Checking for Duplicate
+                            for (item in currentFertilizerList){
+
+                                if (item.name.equals(fertilizerName, ignoreCase = true)){
+                                    Snackbar.make(requireView(),"Already Exist",Snackbar.LENGTH_SHORT).show()
+                                    break
+                                }
+                            }
+                            
+                            if (!isDuplicate){
+                                viewModel.upsertCatalog(FertilizerModel(name = etNamePopup.text.toString().trim()))
+                                Snackbar.make(requireView(),"Saved",Snackbar.LENGTH_SHORT).show()
+                                dismiss()
+                            }
+
+
                         }else{
                             Toast.makeText(requireContext(),"Enter Fertilizer name",Toast.LENGTH_SHORT).show()
                         }
